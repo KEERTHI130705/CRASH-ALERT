@@ -31,30 +31,61 @@ When a sudden impact is detected (based on acceleration magnitude), the system:
   - SoftwareSerial.h
 
 ---
----
+## 🔌 Hardware Connections
 
-## 🚀 How It Works
+Here’s how all the components are connected to your Arduino Uno:
 
-1. *Impact Detection*: Uses ADXL345 to calculate magnitude of acceleration.
-2. *Trigger Alert*:
-   - Turns on a buzzer.
-   - Sends an SMS with location via SIM800.
-   - Makes a call to the emergency contact.
-3. *Manual Alert*: Button press also triggers alert manually.
-
----
-
-## 🔧 Setup Instructions
-
-1. *Connect hardware modules* to Arduino pins as defined in the sketch.
-2. Upload crash_alert.ino to your Arduino using the Arduino IDE.
-3. Make sure your SIM800 module has:
-   - A working SIM with balance
-   - Proper signal strength
-4. Power it on and simulate a crash (shake it hard!) or press the button.
+### 🛰 ADXL345 Accelerometer (via I2C)
+| ADXL345 Pin | Arduino Uno Pin |
+|-------------|------------------|
+| VCC         | 3.3V             |
+| GND         | GND              |
+| SDA         | A4               |
+| SCL         | A5               |
 
 ---
 
+### 📡 SIM800L GSM Module (via SoftwareSerial)
+| SIM800L Pin | Arduino Uno Pin | Notes                          |
+|-------------|------------------|--------------------------------|
+| VCC         | 5V (external)    | Use separate power supply      |
+| GND         | GND              | Common ground with Arduino     |
+| TXD         | D2 (rxPin)       | Use voltage divider (5V → 2.8V)|
+| RXD         | D3 (txPin)       |                                |
+
+---
+
+### 📍 NEO-6M GPS Module (via AltSoftSerial)
+| GPS Pin | Arduino Uno Pin | Description                     |
+|---------|------------------|---------------------------------|
+| VCC     | 5V               | Power supply                    |
+| GND     | GND              | Common ground                   |
+| TX      | D8 (RX)          | Arduino receives GPS data       |
+| RX      | D9 (TX)          | Not used (AltSoftSerial TX)     |
+
+---
+
+### 🔔 Buzzer
+| Buzzer Pin | Arduino Uno Pin |
+|------------|------------------|
+| +          | D5               |
+| -          | GND              |
+
+---
+
+### 🔘 Push Button
+| Button Pin | Arduino Uno Pin | Notes                         |
+|------------|------------------|-------------------------------|
+| One End    | D6               | Connected with INPUT_PULLUP   |
+| Other End  | GND              |                               |
+
+---
+
+> ⚠ *Note:*  
+> - SIM800L can be unstable with USB power — use a dedicated 5V 2A power source.
+> - Add a voltage divider for Arduino TX → SIM800 RX to avoid damaging SIM800.
+
+---
 
 ## 🌟 Future Enhancements
 
